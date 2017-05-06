@@ -5,3 +5,7 @@ fileHandle.close()
 with open('/tmp/pythonFileOpTest.txt') as fp:
     for line in iter(fp.readline, ''):
     	print line
+
+    	with open('/tmp/pythonFileOpTest.txt') as fp:
+    		for line in iter(fp.readline, ''):
+    			print line
