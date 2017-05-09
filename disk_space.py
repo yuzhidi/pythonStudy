@@ -4,7 +4,7 @@ from subprocess import Popen, PIPE
 import re
 def disk_space(pattern="2[0-9]%", message="CAPACITY WARNING"):
     ## take shell command output
-    ps = Popen("df -h", shell=True, stdout=PIPE, stderr=PIPE)
+    ps = Popen(["df", "-h"] , shell=True, stdout=PIPE, stderr=PIPE)
     output_lines = ps.stdout.readlines()
     print '------'
     print len(output_lines)

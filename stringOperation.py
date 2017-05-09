@@ -20,12 +20,14 @@ a,b,c = data
 print a + b + c 
 
 
-patternTime = re.compile("(\S+\s.*?)\s") 
+patternTime = re.compile("(\S+?)\s(.*?)\s") 
 
 m = re.search(patternTime, ONLINE_LOG)
 if m:
 	print "found"
-	print m.group(1)
+	print m.group(1) + " , " + m.group(2)
+	if m.group(1) == "20170427":
+		print "equal"
 
 if 3 > 5 or 4 > 1:
 	print "4>1"

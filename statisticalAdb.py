@@ -20,6 +20,7 @@ patternLogTime = re.compile("(\S+\s.*?)\s")
 patternDeviceName = re.compile("(\S+)\s+device usb");
 patternDeviceInfo = re.compile("product:(.*)\smodel:(.*)\sdevice:(.*)");
 patternDockerPsAdb = re.compile("(r-stf-adb.*)");
+patternDockerPsTest = re.compile(".*(rio.lab.tb.*)");
 RIO_ADB_LOG_TMP_FILE = "/tmp/rio.adb.log"
 ADB_DEVICES_TMP_FILE = "/tmp/adbdevices"
 REPORT_FILE = "/tmp/statisticalAdbreport.csv"
@@ -64,8 +65,20 @@ def findAdbDocker():
 			print line
 			m = re.search(patternDockerPsAdb, line)
 			if m:
-				print m.group(0)
-				return m.group(0)
+				print m.group(1)
+				return m.group(1)
+
+def findTestDocker():
+		# TODO docker path
+		cmd = DOCKER_BIN + " ps";
+		ps = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
+		output_lines = ps.stdout.readlines()
+		for line in output_lines:
+			print line
+			m = re.search(patternDockerPsTest, line)
+			if m:
+				print m.group(1)
+				return m.group(1)
 
 def getAdblog(adbDocker):
 	cmd = DOCKER_BIN + " " + adbDocker + " cat rio.adb.log.0 > " + RIO_ADB_LOG_TMP_FILE;
@@ -82,9 +95,10 @@ def getResult():
 	TODO need save host ip?
 	'''
 	reportfileHandle.write ( 'serial,product,model,device,online,offline,plug time,unplug time\n' )
-	# get device serial first
-	with open(ADB_DEVICES_TMP_FILE) as adbDevicesFp:
-		for line in iter(adbDevicesFp.readline, ''):
+	cmd = DOCKER_BIN  + " " + adbDocker + " adb devices"
+	adbdeviceProcess = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
+	output_lines = adbdeviceProcess.stdout.readlines()
+	for line in output_lines:
 			serial = None
 			product = ""
 			model = ""
@@ -106,7 +120,7 @@ def getResult():
 				model = m.group(2)
 				device = m.group(3)
 
-
+			# check key words in log file	
 			with open(RIO_ADB_LOG_TMP_FILE) as logFp:
 				for line in iter(logFp.readline, ''):
 					onLineLog = "to uuid " + serial
@@ -141,7 +155,7 @@ def getResult():
 
 
 def getAdbDevices(adbDocker):
-	cmd = DOCKER_BIN  + " " + adbDocker + " adb devices > " + ADB_DEVICES_TMP_FILE;
+	cmd = DOCKER_BIN  + " " + adbDocker + " adb devices >> " + ADB_DEVICES_TMP_FILE;
 	execute_command(cmd)
 	if not os.pth.exists(ADB_DEVICES_TMP_FILE):
 		print ADB_DEVICES_TMP_FILE + " is not exists!"
@@ -149,6 +163,7 @@ def getAdbDevices(adbDocker):
 	return True
 
 if __name__ == '__main__':
+	findTestDocker()
 	adbDocker = findAdbDocker()
 	if adbDocker == None:
 		print "adb docker not found"
