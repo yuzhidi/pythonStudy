@@ -60,7 +60,8 @@ def testPattern(data):
 	for line in data:
 		print line
 		# not add as Bus 010 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-		if line.endswith(' hub') or line.endswith(' Hub') or line.endswith(' hub\n') or line.endswith(' Hub\n'):
+		if (line.endswith('Linux Foundation 2.0 root hub') or line.endswith('Linux Foundation 3.0 root hub')
+		    or line.endswith('Linux Foundation 3.0 root hub\n') or line.endswith('Linux Foundation 2.0 root hub\n')):
 			continue
 		m = re.search(patternLsUsb, line)
 		if m:
@@ -75,11 +76,18 @@ def testPattern(data):
 	f.close()
 
 def moveTBrules():
+		print "maybe you will enter password"
 		cmd = "sudo cp /tmp/tb-android.rules /etc/udev/rules.d/tb-android.rules";
 		ps = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
 		output_lines = ps.stdout.readlines()
 		for line in output_lines:
 			print line
+
+def printComingAction():
+	print "you should do: sudo service udev restart"
+	print "if not success do: sudo restart udev"
+	print "then do: adb kill-server; adb start-server"
+	print "plug off then plug in devices"
 
 if __name__ == '__main__':
 
@@ -92,3 +100,4 @@ if __name__ == '__main__':
 		print lsusbData
 		testPattern(lsusbData)
 		moveTBrules()
+		printComingAction()
