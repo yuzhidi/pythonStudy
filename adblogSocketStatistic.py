@@ -19,16 +19,16 @@ def statistical():
     for line in lines:
         m = re.search(patternRS, line)
         if m:
-            print line
-            print m.group(1)
+            # print line
+            # print m.group(1)
             if m.group(2) == "created":
-                print "created"
+                # print "created"
                 if m.group(1) in setRS:
                     print "error: %s has created" % (m.group(1))
                 else:
                     setRS.add(m.group(1))
             elif m.group(2) == "closed":
-                print "closed"
+                # print "closed"
                 if m.group(1) not in setRS:
                     print "error: %s has closed" % (m.group(1))
                 else:
@@ -36,25 +36,28 @@ def statistical():
         else:
             m = re.search(patternLS, line)
             if m:
-                print line
-                print m.group(1)
+                # print line
+                # print m.group(1)
                 if m.group(2) == "created":
-                    print "created"
+                    # print "created"
                     if m.group(1) in setLS:
                         print "error: %s has created" % (m.group(1))
                     else:
                         setLS.add(m.group(1))
                 elif m.group(2) == "closed":
-                    print "closed"
+                    # print "closed"
                     if m.group(1) not in setLS:
                         print "error: %s has closed" % (m.group(1))
                     else:
                         setLS.remove(m.group(1))
+    print "Remote socket :"
     print setRS
+    print "Local socket :"
     print setLS
 
 def usage():
-    print ' -f log file \n' \
+    print 'usage:\n' \
+          ' -f log file \n' \
           ' -i ip address\n' \
           ' -p port number\n' \
           ''
@@ -62,6 +65,11 @@ def usage():
 def handleOpt():
     try:
         options, args = getopt.getopt(sys.argv[1:], "f:i:p:", ['file=', "ip=", "port="])
+        # print args
+        if len(options) == 0:
+            usage()
+            exit(1)
+
         for name, value in options:
             if name in ('-f', '--file'):
                 global logFile
