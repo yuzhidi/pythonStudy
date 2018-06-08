@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*
 # Print iterations progress
 import sys
+import time
 import datetime
 
 RED   = "\033[1;31m"
@@ -78,7 +79,7 @@ def indexOfTodayInYear() :
     day = now.day
 
     strX = chineseWeek(now.weekday())
-
+    weekNumber = time.strftime("%W")
     arr=[31,28,31,30,31,30,31,31,30,31,30,31]
     total=365
     sum=day
@@ -86,15 +87,15 @@ def indexOfTodayInYear() :
         sum+=arr[i]
     if year%4==0:
         if year%100==0 and year%400!=0:
-            print ("\n\n\n\n\n                    %s年%s月%s日 %s 这是今年的第%d天" % (now.year, now.month, now.day, strX,  sum))
+            print ("\n\n\n\n\n                  %s年%s月%s日 %s 这是今年的第%d天 第%s周" % (now.year, now.month, now.day, strX,  sum, weekNumber))
             #print("这是今年的第%d天" % sum)
         else:
             sum=sum+1
             total=total+1
-            print ("\n\n\n\n\n                    %s年%s月%s日 %s 这是今年的第%d天" % (now.year, now.month, now.day, strX,  sum))
+            print ("\n\n\n\n\n                  %s年%s月%s日 %s 这是今年的第%d天 第%s周" % (now.year, now.month, now.day, strX,  sum, weekNumber))
             #print("这是今年的第%d天" % sum)
     else:
-        print ("\n\n\n\n\n                  %s年%s月%s日 %s 这是今年的第%d天" % (now.year, now.month, now.day, strX,  sum))
+        print ("\n\n\n\n\n                %s年%s月%s日 %s 这是今年的第%d天 第%s周" % (now.year, now.month, now.day, strX,  sum, weekNumber))
         #print("这是今年的第%d天" % sum)
 
     ret = []
