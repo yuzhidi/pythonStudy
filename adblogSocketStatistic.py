@@ -62,14 +62,9 @@ def statistical():
     print "repeatCount RS:%d" % (repeatCount)
     isFirst = True
 
-    grepLSCmd = "grep -nE \""
+    grepLSCmd = ""
     for localSocket in setLS:
-        if isFirst:
-            isFirst = False
-            grepLSCmd += "LS\(%s\)" % (localSocket)
-        else:
-            grepLSCmd += "|LS\(%s\)" % (localSocket)
-    grepLSCmd += "\" " + logFile
+            grepLSCmd += "grep -n \"LS(%s)\" %s;\n" % (localSocket, logFile)
     # print grepLSCmd
     grepScriptFilePath = "/tmp/grepLSCmd.sh"
     grepScript = open(grepScriptFilePath, "w")
