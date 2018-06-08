@@ -14,7 +14,10 @@ def usage():
 def handleOpt():
     try:
         options, args = getopt.getopt(sys.argv[1:], "hp:i:", ['help', "ip=", "port="])
-         for name, value in options:
+        if len(sys.argv) == 1:
+          usage()
+        else:
+          for name, value in options:
             if name in ('-h', '--help'):
                 usage()
             elif name in ('-i', '--ip'):
