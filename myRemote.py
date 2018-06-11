@@ -13,7 +13,11 @@ gUsername = 'xuanqi'
 gPassword = 'a123456'
 gCommand = ''
 gRemoteFile = ''
-gPrint = True
+gResultPrint = False
+gLogPrint = False
+gCommandPrint = False
+
+gFeatureAdbDevicesOn = False
 
 PatternDeviceName = re.compile("(\S+)\s+device usb");
 PatternDeviceInfo = re.compile("product:(.*)\smodel:(.*)\sdevice:(.*)");
@@ -25,7 +29,10 @@ def usage():
         ' -u --username ssh user name\n' \
         ' -w --password ssh password\n' \
         ' -c --command command will execute on remote host\n' \
-        ' -m --remote file path\n'
+        ' -m --remote file path\n' \
+        '\n' \
+        ' --adbdevices run command adb devices on remote host\n' \
+        ' --rprint result print\n' \
 
 
 class SSHConnection(object):
@@ -65,7 +72,8 @@ class SSHConnection(object):
         stdin, stdout, stderr = self._client.exec_command(command)
         data = stdout.read()
         if len(data) > 0:
-            print data.strip()   #打印正确结果
+            if gCommandPrint:
+                print data.strip()   #打印正确结果
             return data
         err = stderr.read()
         if len(err) > 0:
@@ -133,12 +141,13 @@ def deviceList2File(deviceList):
     # save device info to file
     #
     uuidFilePath = os.getcwd() + os.sep + 'adbdevicesList'
-    print uuidFilePath
     fo = open(uuidFilePath, "w+")
     json.dump(deviceList, fo, indent=4)
     fo.close()
-    if gPrint:
+    print "\nadb devices result: %s" % uuidFilePath
+    if gResultPrint:
         print json.dumps(deviceList, indent=4)
+
     pass
 
 def adbDevices():
@@ -153,36 +162,60 @@ def testDownload():
     conn.download("/home/xuanqi/log4crc", "/tmp/log4crc")
     pass
 
-def handleOpt():
+def parseOpt():
     try:
-        options, args = getopt.getopt(sys.argv[1:], "hi:p:u:w:c:m:", ['help', "ip=", "port=", "username=", "password=", "command=", "remote="])
+        options, args = getopt.getopt(sys.argv[1:], "hi:p:u:w:c:m:", [ "help", "adbdevices", "cprint", "rprint", "lprint", "ip=", "port=", "username=", "password=", "command=", "remote="])
         if len(sys.argv) == 1:
             usage()
+            exit(1)
+        else:
             for name, value in options:
                 if name in ('-h', '--help'):
                     usage()
                 elif name in ('-i', '--ip'):
                     print "ip: %s" % value
+                    global gIp
                     gIp = value
                 elif name in ('-p', '--port'):
                     print "port: %s" % value
+                    global gPort
                     gPort = value
                 elif name in ('-u', '--username'):
                     print "username: %s" % value
+                    global gUsername
                     gUsername = value
                 elif name in ('-w', '--password'):
                     print "password: %s" % value
+                    global gPassword
                     gPassword = value
                 elif name in ('-c', '--command'):
                     print "command: %s" % value
+                    global gCommand
                     gCommand = value
                 elif name in ('-m', '--remote'):
                     print "remote: %s" % value
+                    global gRemoteFile
                     gRemoteFile = value
+                elif name in ('--adbdevices'):
+                    print "feature adb devices on"
+                    global gFeatureAdbDevicesOn
+                    gFeatureAdbDevicesOn = True
+                elif name in ('--rprint'):
+                    global gResultPrint
+                    gResultPrint = True
+                elif name in ('--lprint'):
+                    global gLogPrint
+                    gLogPrint = True
+                elif name in ('--cprint'):
+                    global gCommandPrint
+                    gCommandPrint = True
+
+
     except getopt.GetoptError:
         usage()
 
 
 if __name__ == "__main__":
-    handleOpt()
-    adbDevices()
+    parseOpt()
+    if gFeatureAdbDevicesOn:
+        adbDevices()
