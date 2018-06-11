@@ -13,6 +13,7 @@ gUsername = 'xuanqi'
 gPassword = 'a123456'
 gCommand = ''
 gRemoteFile = ''
+gPrint = True
 
 PatternDeviceName = re.compile("(\S+)\s+device usb");
 PatternDeviceInfo = re.compile("product:(.*)\smodel:(.*)\sdevice:(.*)");
@@ -103,7 +104,7 @@ def getDeviceList(data):
     lines = data.splitlines()
     # print lines
     for line in lines:
-        print "line %s" % line
+        #print "line %s" % line
         m = re.search(PatternDeviceName, line)
         if m:
             deviceSerial = m.group(1)
@@ -115,13 +116,15 @@ def getDeviceList(data):
             product = m.group(1)
             model = m.group(2)
             device = m.group(3)
-            print "product:%s, model:%s, device:%s" % (product, model, device)
+            #print "product:%s, model:%s, device:%s" % (product, model, device)
             deviceInfo = {}
             deviceInfo['uuid'] = deviceSerial
             deviceInfo['product'] = product
             deviceInfo['model'] = model
             deviceInfo['device'] = device
             deviceInfo['ip'] = gIp
+            # for grep easy
+            deviceInfo['uuid_ip'] = deviceSerial + '_'  + gIp
             deviceList.append(deviceInfo)
     return deviceList
 
@@ -129,21 +132,18 @@ def deviceList2File(deviceList):
     #
     # save device info to file
     #
-    print deviceList
     uuidFilePath = os.getcwd() + os.sep + 'adbdevicesList'
     print uuidFilePath
     fo = open(uuidFilePath, "w+")
-    json.dump(deviceList, fo)
+    json.dump(deviceList, fo, indent=4)
     fo.close()
+    if gPrint:
+        print json.dumps(deviceList, indent=4)
     pass
 
 def adbDevices():
     conn = SSHConnection(gIp, gPort, gUsername, gPassword)
-    # conn.exec_command('ps')
-    conn.exec_command('ls -l')
-    #cd需要特别处理
     data = conn.exec_command('adb devices -l')
-    print "data:\n%s" % data
     deviceList = getDeviceList(data)
     deviceList2File(deviceList)
 
