@@ -158,10 +158,6 @@ def adbDevices():
 
     conn.close()
 
-def testDownload():
-    conn.download("/home/xuanqi/log4crc", "/tmp/log4crc")
-    pass
-
 def parseOpt():
     try:
         options, args = getopt.getopt(sys.argv[1:], "hi:p:u:w:c:m:", [ "help", "adbdevices", "cprint", "rprint", "lprint", "ip=", "port=", "username=", "password=", "command=", "remote="])
