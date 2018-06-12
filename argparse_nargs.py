@@ -4,6 +4,9 @@ import argparse
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
+    parser.add_argument('-a', action="store_true", default=False)
+    parser.add_argument('-b', action="store", dest="b")
+    parser.add_argument('-c', action="store", dest="c", type=int)
     parser.add_argument('--three', nargs=3)
     parser.add_argument('--optional', nargs='?')
     parser.add_argument('--all', nargs='*', dest='all')
