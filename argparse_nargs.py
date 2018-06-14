@@ -16,6 +16,8 @@ if __name__ == "__main__":
 
     print result
 
+    if result.c is None:
+        print result.c
     if result.three:
         print result.three
 
