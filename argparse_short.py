@@ -14,3 +14,15 @@ print result
 #
 print result.b
 print result.count
+
+result = parser.parse_args(['-bval'])
+print result
+
+if result.a or result.b or result.count:
+	print "or:" + str(result)
+
+result = parser.parse_args()
+print result
+
+if result.a or result.b or result.count:
+	print "or2:" + str(result)
