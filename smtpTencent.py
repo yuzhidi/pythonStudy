@@ -63,9 +63,9 @@ class MyEmail:
 if __name__ == "__main__":
     my = MyEmail()
 
-    my.user = ""
-    my.passwd = ""
-    my.to_list = ['',]
+    my.user = "wangliang@testbird.com"
+    my.passwd = "ETvbx5hkZ6gZRHJb"
+    my.to_list = ['leocone@qq.com', 'wangliang@testbird.com']
     my.cc_list = ["", ]
     my.tag = "test stmp"
     my.doc = u"/tmp/testDOC"

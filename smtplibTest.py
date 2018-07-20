@@ -1,8 +1,8 @@
 # coding:utf8
 import smtplib
-sender = ''
-my_pass= ''
-receivers = ['']
+sender = 'wlia@163.com'
+my_pass= 'leoneed7'
+receivers = ['leocone@qq.com']
 
 
 # receivers = ['xxxx@testbird.com']
