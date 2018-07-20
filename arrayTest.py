@@ -41,3 +41,17 @@ print 'test print last' + testNotFound[-1]
 # 	print 'fine not found'
 
 # print 'test print last' + testNotFound[-1]
+print testNotFound[1]
+print 'reverse---------->'
+testNotFound.reverse()
+print testNotFound
+
+for i, value in enumerate(testNotFound):
+	print i
+	print value
+
+wildcardlist = ['a', 'lis*', 'c']
+if '*' in wildcardlist:
+	print 'wildcard in wildcard list'
+if 'lis*' in wildcardlist:
+	print 'lis wildcard in wildcard list'

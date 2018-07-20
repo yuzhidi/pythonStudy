@@ -48,7 +48,35 @@ matcher = re.search(pattern, text)
 if matcher:
 		print matcher.group(0)
 
+patternDjangoDocker = re.compile("([a-zA-Z0-9]+)\s+hub.testbird.com/django");
+djangoPsline = '3247ef1bdab5        hub.testbird.com/django/quail:baseimage-1567   "/django-entrypoint.s"   25 hours ago        Up 25 hours         80/tcp, 443/tcp                                                                   docker_mobiletest.gf.com.cn_1'
 
+print 'test django ps line'
+matcher = re.search(patternDjangoDocker, djangoPsline)
+if matcher:
+	print matcher.group(0)
+	print matcher.group(1)
 
 # run_command("xcodebuild -project /Users/wangliang/work/TBiOSRunner/TBRunner/TBRunner.xcodeproj -scheme TestRunner -destination 'platform=iOS Simulator,name=iPhone X,OS=11.2' build-for-testing")
+print 'makefilter------------------------'
+def makefilter(keep):
+    """ Return a functor that takes a string and returns a copy of that
+        string consisting of only the characters in 'keep'.
+    """
+    import string
+
+    # make a string of all chars, and one of all those NOT in 'keep'
+    allchars = string.maketrans('', '')
+    delchars = ''.join([c for c in allchars if c not in keep])
+
+    # return the functor
+    return lambda s,a=allchars,d=delchars: s.translate(a, d)
+
+import string
+identifier = makefilter(string.letters + string.digits + '_')
+
+print identifier
+print string.maketrans('','')
+print identifier("xcodebuild -project /Users/wangliang/work/TBiOSRunner/TBRunner/TBRunner.xcodeproj -scheme TestRunner -destination 'platform=iOS Simulator,name=iPhone X,OS=11.2' build-for-testing")
+
 
