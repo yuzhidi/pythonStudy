@@ -41,9 +41,6 @@ def doGrep():
 	global leftBrace
 	global rightBrace
 
-	if gArgs.roc:
-		gArgs.WDACommunication = True
-
 	with open(gArgs.src) as fp:
 		for line in fp.readlines():
 			if toMatch:
@@ -56,16 +53,37 @@ def doGrep():
 					# print '>>>>>>>>>>>>>> toMatch=1'
 					toMatch = 1
 					checkBrace(line)
+			elif gArgs.keywords:
+				for keyword in gArgs.keywords:
+					if keyword in line:
+						print line
+
+def addKeywords(keyword):
+	if not gArgs.keywords:
+		gArgs.keywords = []
+
+	gArgs.keywords.append(keyword)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--src', help='source file')
     parser.add_argument('--WDACommunication', action="store_true", default=False, help='grep WDACommunication')
+    parser.add_argument('--sendExecutionStatus', action="store_true", default=False, help='grep sendExecutionStatus')
     parser.add_argument('--roc', action="store_true", default=False, help='enable --WDACommunication')
     parser.add_argument('--dst', help='save result to file')
+    parser.add_argument('--keywords', nargs='+', help='grep keyword')
+    parser.add_argument('--checkBraceWords')
 
 
     global gArgs
     gArgs = parser.parse_args()
+
+    if gArgs.roc:
+		gArgs.WDACommunication = True
+		gArgs.sendExecutionStatus = True
+
+    if gArgs.sendExecutionStatus:
+        addKeywords('sendExecutionStatus')
+
     doGrep()
