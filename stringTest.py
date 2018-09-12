@@ -1,6 +1,8 @@
 #!/usr/bin/python
 import os
 if __name__ == '__main__':
+	strTestSplit = ':abc:e:f:::::'
+	print strTestSplit.split(':')
 	str1 = 'ab c\n\nde fg\rkl\r\n'
 	print isinstance(str1, str)
 	print str1.splitlines();
