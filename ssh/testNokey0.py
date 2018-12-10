@@ -13,3 +13,5 @@ stdin,stdout,stderr=ssh.exec_command('hostname')
 print(stdout.read())
 stdin,stdout,stderr=ssh.exec_command('ls')
 print(stdout.readlines())
+
+

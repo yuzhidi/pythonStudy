@@ -1,5 +1,8 @@
 #!/usr/bin/python
+# coding: utf-8
 import os
+import re
+
 if __name__ == '__main__':
 	strTestSplit = ':abc:e:f:::::'
 	print strTestSplit.split(':')
@@ -9,6 +12,27 @@ if __name__ == '__main__':
 
 	str2 = 'ab c\n\nde fg\rkl\r\n'
 	print str2.splitlines(True)
+
+	print 'str3 ------>'
+	str3 = 'aacd720ede11        hub.testbird.com/tbstf/testcenter:legacy-1348   "java -Djava.rmi.ser…"   2 weeks ago         Up 7 days                               r-stf-116-testcenter-1-748fda5f'
+	elements = str3.split()
+	for i in elements:
+		print('start for --------')
+		print i
+	print 'str3 <------'
+	elements = str3.split(' +')
+	for i in elements:
+		print('start4 for --------')
+		print i
+	print 'str4 <------'
+	print elements
+	print 'str5 >------'
+	print elements[0]
+	print 'str5 <------'
+	elements = re.split(' +', str3)
+	print elements[-1]
+	print 'str6 <------'
+
 
 	strEndSep = 'abc/efg/'
 	print 'src'+strEndSep
